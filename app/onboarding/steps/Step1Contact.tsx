@@ -35,7 +35,7 @@ export default function Step1Contact({ onNext, updateData, data }: StepProps) {
 
     const onSubmit = (values: ContactFormValues) => {
         updateData(values);
-        onNext();
+        if (onNext) onNext();
     };
 
     return (

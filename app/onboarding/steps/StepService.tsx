@@ -57,7 +57,7 @@ export default function StepService({ onNext, onBack, updateData, data }: StepPr
 
     const onSubmit = (values: ServiceFormValues) => {
         updateData(values);
-        onNext();
+        if (onNext) onNext();
     };
 
     return (

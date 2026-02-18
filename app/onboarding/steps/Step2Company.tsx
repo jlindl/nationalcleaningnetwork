@@ -31,7 +31,7 @@ export default function Step2Company({ onNext, onBack, updateData, data }: StepP
 
     const onSubmit = (values: CompanyFormValues) => {
         updateData(values);
-        onNext();
+        if (onNext) onNext();
     };
 
     return (

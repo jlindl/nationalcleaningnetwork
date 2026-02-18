@@ -50,7 +50,7 @@ export default function Step3Insurance({ onNext, onBack, updateData, data }: Ste
             return;
         }
         updateData({ ...values, insuranceDocFile: file });
-        onNext();
+        if (onNext) onNext();
     };
 
     return (

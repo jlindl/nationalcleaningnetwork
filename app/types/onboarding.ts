@@ -25,7 +25,7 @@ export type OnboardingData = {
 export type StepProps = {
     data: Partial<OnboardingData>;
     updateData: (fields: Partial<OnboardingData>) => void;
-    onNext: () => void;
+    onNext?: () => void;
     onBack?: () => void; // Made optional as first step might not have back
     onSubmitFinal?: (awards?: string) => void;
     isSubmitting?: boolean;
