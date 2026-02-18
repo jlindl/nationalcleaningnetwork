@@ -13,7 +13,9 @@ const companySchema = z.object({
 
 type CompanyFormValues = z.infer<typeof companySchema>;
 
-export default function Step2Company({ onNext, onBack, updateData, data }: any) {
+import { StepProps } from "../../types/onboarding";
+
+export default function Step2Company({ onNext, onBack, updateData, data }: StepProps) {
     const {
         register,
         handleSubmit,

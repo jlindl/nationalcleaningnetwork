@@ -4,7 +4,9 @@ import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-export default function Step4Awards({ onBack, updateData, data, onSubmitFinal, isSubmitting }: any) {
+import { StepProps } from "../../types/onboarding";
+
+export default function Step4Awards({ onBack, updateData, data, onSubmitFinal, isSubmitting }: StepProps) {
     const { register, handleSubmit } = useForm({
         defaultValues: {
             awards: data.awards,
@@ -13,7 +15,9 @@ export default function Step4Awards({ onBack, updateData, data, onSubmitFinal, i
 
     const onSubmit = (values: any) => {
         updateData(values);
-        onSubmitFinal(values.awards); // Trigger final submission
+        if (onSubmitFinal) {
+            onSubmitFinal(values.awards);
+        }
     };
 
     return (

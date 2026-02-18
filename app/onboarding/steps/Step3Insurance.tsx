@@ -14,7 +14,9 @@ const insuranceSchema = z.object({
 
 type InsuranceFormValues = z.infer<typeof insuranceSchema>;
 
-export default function Step3Insurance({ onNext, onBack, updateData, data }: any) {
+import { StepProps } from "../../types/onboarding";
+
+export default function Step3Insurance({ onNext, onBack, updateData, data }: StepProps) {
     const [file, setFile] = useState<File | null>(data.insuranceDocFile || null);
     const [fileError, setFileError] = useState<string | null>(null);
 

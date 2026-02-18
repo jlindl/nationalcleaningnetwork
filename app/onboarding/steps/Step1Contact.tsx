@@ -15,7 +15,9 @@ const contactSchema = z.object({
 
 type ContactFormValues = z.infer<typeof contactSchema>;
 
-export default function Step1Contact({ onNext, updateData, data }: any) {
+import { StepProps } from "../../types/onboarding";
+
+export default function Step1Contact({ onNext, updateData, data }: StepProps) {
     const {
         register,
         handleSubmit,
