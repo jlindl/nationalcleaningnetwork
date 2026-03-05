@@ -1,4 +1,5 @@
 export type OnboardingData = {
+    leadId?: string;
     // Step 1: Contact
     firstName: string;
     lastName: string;
@@ -14,11 +15,13 @@ export type OnboardingData = {
     companyName: string;
     companyNumber?: string; // Optional
     officeAddress: string;
-    // Step 3: Insurance
-    insurerName: string;
+    logoFile?: File | null;
+    logoUrl?: string; // Stored URL
+    // Step 3 (Now Verification Dashboard only): Insurance
+    insurerName?: string;
     insuranceDocFile?: File | null;
     insuranceDocUrl?: string; // Stored URL
-    // Step 4: Awards
+    // Dashboard Only: Awards
     awards?: string;
 };
 

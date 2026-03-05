@@ -32,20 +32,9 @@ export default function LoginPage() {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
                 if (userType === "cleaner") {
-                    // Check if clean profile exists
-                    const { data: cleaner } = await supabase
-                        .from('cleaners')
-                        .select('id')
-                        .eq('user_id', user.id)
-                        .single();
-
-                    if (cleaner) {
-                        router.push("/dashboard");
-                    } else {
-                        // Maybe they signed up but didn't finish onboarding? Or they are a client trying to login as cleaner?
-                        // For now, redirect to onboarding if no profile found
-                        router.push("/onboarding");
-                    }
+                    // The user is authenticated. Let them go to the dashboard.
+                    // If they have no profile, the dashboard itself will handle that state.
+                    router.push("/dashboard");
                 } else {
                     // Client Logic (Placeholder)
                     router.push("/search");
@@ -68,8 +57,8 @@ export default function LoginPage() {
                             type="button"
                             onClick={() => setUserType("cleaner")}
                             className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all ${userType === "cleaner"
-                                    ? "bg-white text-sky-600 shadow-sm"
-                                    : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"
+                                ? "bg-white text-sky-600 shadow-sm"
+                                : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"
                                 }`}
                         >
                             I'm a Cleaner
@@ -78,8 +67,8 @@ export default function LoginPage() {
                             type="button"
                             onClick={() => setUserType("client")}
                             className={`flex-1 py-2 px-4 rounded-lg text-sm font-bold transition-all ${userType === "client"
-                                    ? "bg-white text-sky-600 shadow-sm"
-                                    : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"
+                                ? "bg-white text-sky-600 shadow-sm"
+                                : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"
                                 }`}
                         >
                             I'm a Client

@@ -7,8 +7,7 @@ import { OnboardingData } from "../types/onboarding";
 import Step1Contact from "./steps/Step1Contact";
 import StepService from "./steps/StepService";
 import Step2Company from "./steps/Step2Company";
-import Step3Insurance from "./steps/Step3Insurance";
-import Step4Awards from "./steps/Step4Awards";
+import Step3Logo from "./steps/Step3Logo";
 import { useRouter } from "next/navigation";
 
 export default function OnboardingPage() {
@@ -38,24 +37,69 @@ export default function OnboardingPage() {
         if (typeof window !== "undefined" && Object.keys(data).length > 0) {
             // Exclude File object before saving
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { insuranceDocFile, ...rest } = data;
+            const { logoFile, ...rest } = data;
             localStorage.setItem("ncn-onboarding-data", JSON.stringify(rest));
         }
     }, [data]);
 
-    const updateData = (fields: Partial<OnboardingData>) => {
-        setData((prev) => ({ ...prev, ...fields }));
+    const updateData = async (fields: Partial<OnboardingData>) => {
+        const newData = { ...data, ...fields };
+        setData(newData);
+
+        // Save progress to Supabase periodically
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { logoFile, ...safeData } = newData;
+
+            if (!newData.leadId) {
+                const { data: leadData, error } = await supabase
+                    .from('onboarding_leads')
+                    .insert({
+                        first_name: newData.firstName,
+                        last_name: newData.lastName,
+                        email: newData.email,
+                        phone: newData.phone,
+                        current_step: currentStep,
+                        form_data: safeData
+                    })
+                    .select('id')
+                    .single();
+
+                if (leadData?.id) {
+                    setData(prev => ({ ...prev, leadId: leadData.id }));
+                }
+                if (error) console.error("Supabase insert lead error:", error);
+            } else {
+                const { error } = await supabase
+                    .from('onboarding_leads')
+                    .update({
+                        first_name: newData.firstName,
+                        last_name: newData.lastName,
+                        email: newData.email,
+                        phone: newData.phone,
+                        current_step: currentStep,
+                        updated_at: new Date().toISOString(),
+                        form_data: safeData
+                    })
+                    .eq('id', newData.leadId);
+
+                if (error) console.error("Supabase update lead error:", error);
+            }
+        } catch (e) {
+            console.error("Failed to save progress", e);
+        }
     };
 
     const nextStep = () => setCurrentStep((prev) => prev + 1);
     const prevStep = () => setCurrentStep((prev) => prev - 1);
 
-    const handleFinalSubmit = async (finalAwards?: string) => {
+    const handleFinalSubmit = async () => {
         setIsSubmitting(true);
         setError(null);
 
-        // Merge final data
-        const finalData = { ...data, awards: finalAwards };
+        // Merge final data (React state lags slightly behind the final update call)
+        // Data is passed from Step3Logo via updateData before this fires.
+        const finalData = { ...data };
 
         try {
             if (!finalData.email || !finalData.password) {
@@ -64,7 +108,33 @@ export default function OnboardingPage() {
 
             console.log("Submitting Onboarding Data:", finalData);
 
-            // 1. Sign Up User
+            let uploadedFileName = null;
+            // 1. Upload Logo BEFORE Sign Up
+            if (finalData.logoFile) {
+                console.log("Logo found, attempting upload:", finalData.logoFile.name);
+
+                const fileExt = finalData.logoFile.name.split(".").pop();
+                const prefixId = finalData.leadId || crypto.randomUUID();
+                uploadedFileName = `${prefixId}-${Date.now()}.${fileExt}`;
+
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from("logos")
+                    .upload(uploadedFileName, finalData.logoFile, {
+                        cacheControl: '3600',
+                        upsert: false
+                    });
+
+                if (uploadError) {
+                    console.error("Logo Upload Failed:", uploadError);
+                    uploadedFileName = null; // Do not save invalid url
+                } else {
+                    console.log("Logo Upload Success:", uploadData);
+                }
+            } else {
+                console.log("No logo to upload.");
+            }
+
+            // 2. Sign Up User
             const { data: authData, error: authError } = await supabase.auth.signUp({
                 email: finalData.email,
                 password: finalData.password,
@@ -76,13 +146,11 @@ export default function OnboardingPage() {
                         companyName: finalData.companyName,
                         companyNumber: finalData.companyNumber,
                         officeAddress: finalData.officeAddress,
-                        insurerName: finalData.insurerName,
-                        awards: finalData.awards,
-                        // New Fields
                         serviceTypes: finalData.serviceTypes,
                         otherService: finalData.otherService,
                         baseLocation: finalData.baseLocation,
                         serviceRadius: finalData.serviceRadius,
+                        logoUrl: uploadedFileName, // Save logo to metadata
                     },
                 },
             });
@@ -95,44 +163,12 @@ export default function OnboardingPage() {
             console.log("SignUp Success:", authData);
 
             if (authData.user) {
-                // 2. Upload File if present and user has a session (or just created)
-                if (finalData.insuranceDocFile) {
-                    console.log("File found, attempting upload:", finalData.insuranceDocFile.name);
-
-                    const fileExt = finalData.insuranceDocFile.name.split(".").pop();
-                    const fileName = `${authData.user.id}-${Date.now()}.${fileExt}`;
-
-                    try {
-                        const { data: uploadData, error: uploadError } = await supabase.storage
-                            .from("documents")
-                            .upload(fileName, finalData.insuranceDocFile, {
-                                cacheControl: '3600',
-                                upsert: false
-                            });
-
-                        if (!uploadError) {
-                            console.log("File Upload Success:", uploadData);
-
-                            // CRITICAL FIX: Update the cleaners table with the file path
-                            const { error: dbUpdateError } = await supabase
-                                .from("cleaners")
-                                .update({ insurance_doc_url: fileName })
-                                .eq("user_id", authData.user.id);
-
-                            if (dbUpdateError) {
-                                console.error("Link Document to Profile Failed:", dbUpdateError);
-                            } else {
-                                console.log("Link Document to Profile Success");
-                            }
-                        } else {
-                            console.error("File Upload Failed:", uploadError);
-                            // Do not block success, but log it clearly
-                        }
-                    } catch (e) {
-                        console.error("Upload Exception:", e);
-                    }
-                } else {
-                    console.log("No insurance document to upload.");
+                // Mark onboarding lead as completed
+                if (finalData.leadId) {
+                    await supabase
+                        .from('onboarding_leads')
+                        .update({ is_completed: true, current_step: 3 })
+                        .eq('id', finalData.leadId);
                 }
 
                 // Clear local storage
@@ -156,12 +192,11 @@ export default function OnboardingPage() {
             case 1:
                 return <StepService key="stepService" onNext={nextStep} onBack={prevStep} updateData={updateData} data={data} />;
             case 2:
+                // Combine Company + Logo for step 3
                 return <Step2Company key="step2" onNext={nextStep} onBack={prevStep} updateData={updateData} data={data} />;
             case 3:
-                return <Step3Insurance key="step3" onNext={nextStep} onBack={prevStep} updateData={updateData} data={data} />;
-            case 4:
-                return <Step4Awards
-                    key="step4"
+                return <Step3Logo
+                    key="step3"
                     onBack={prevStep}
                     updateData={updateData}
                     data={data}
@@ -176,9 +211,8 @@ export default function OnboardingPage() {
     const STEP_TITLES = [
         "Contact Details",
         "Services & Location",
-        "Company Info",
-        "Insurance",
-        "Awards & Finish"
+        "Company Details",
+        "Brand Identity"
     ];
 
     return (

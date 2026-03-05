@@ -1,24 +1,21 @@
-"use client";
-
-import Header from "./components/Header";
-import Hero from "./components/Hero";
+import NavBar from "@/components/NavBar";
+import Hero from "@/components/Hero";
+import TrustMetrics from "@/components/TrustMetrics";
+import HowItWorks from "@/components/HowItWorks";
+import DirectoryPreview from "@/components/DirectoryPreview";
+import ForCleaners from "@/components/ForCleaners";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-50 font-sans">
-      <Header />
+    <main className="min-h-screen bg-[#ffffff]">
+      <NavBar />
       <Hero />
-
-      {/* Short value prop section to fill some space for scrolling effect */}
-      <section className="py-24 px-4 md:px-6 container mx-auto text-center">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-slate-900 mb-6">Why Choose National Cleaning Network?</h2>
-          <p className="text-slate-600 text-lg leading-relaxed">
-            We connect homeowners and businesses with top-rated cleaning professionals.
-            Our platform is completely free to use, ensuring you find the best match for your needs without any hidden fees.
-          </p>
-        </div>
-      </section>
+      <TrustMetrics />
+      <HowItWorks />
+      <DirectoryPreview />
+      <ForCleaners />
+      <Footer />
     </main>
   );
 }
