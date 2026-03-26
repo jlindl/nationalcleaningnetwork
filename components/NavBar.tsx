@@ -22,9 +22,9 @@ export default function NavBar() {
 
     return (
         <nav
-            className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled
-                ? "bg-white/90 backdrop-blur-md shadow-sm py-3"
-                : "bg-transparent py-5"
+            className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled
+                ? "glass-effect shadow-lg py-3"
+                : "bg-transparent py-6"
                 }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
@@ -42,32 +42,25 @@ export default function NavBar() {
                 </Link>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center space-x-6">
-                    <Link href="#how-it-works" className={`text-sm font-medium transition-colors duration-300 ${scrolled ? 'text-slate-600 hover:text-[#1E3A8A]' : 'text-slate-200 hover:text-white'}`}>
+                <div className="hidden md:flex items-center space-x-8">
+                    <Link href="#how-it-works" className={`text-sm font-semibold transition-all duration-300 relative group ${scrolled ? 'text-slate-600 hover:text-[#1E3A8A]' : 'text-slate-200 hover:text-white'}`}>
                         How it Works
+                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#3B82F6] transition-all duration-300 group-hover:w-full" />
                     </Link>
-                    <Link href="#directory" className={`text-sm font-medium transition-colors duration-300 ${scrolled ? 'text-slate-600 hover:text-[#1E3A8A]' : 'text-slate-200 hover:text-white'}`}>
+                    <Link href="#directory" className={`text-sm font-semibold transition-all duration-300 relative group ${scrolled ? 'text-slate-600 hover:text-[#1E3A8A]' : 'text-slate-200 hover:text-white'}`}>
                         Directory
+                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#3B82F6] transition-all duration-300 group-hover:w-full" />
                     </Link>
-                    <div className={`h-4 w-px mx-2 transition-colors duration-300 ${scrolled ? 'bg-slate-200' : 'bg-white/20'}`}></div>
+                    <div className={`h-4 w-px mx-0 transition-colors duration-300 ${scrolled ? 'bg-slate-200' : 'bg-white/20'}`}></div>
                     <div className="flex items-center space-x-4">
                         <Link href="/login" className={`text-sm font-medium transition-colors duration-300 ${scrolled ? 'text-slate-600 hover:text-[#0f172a]' : 'text-slate-200 hover:text-white'}`}>
                             Log In
                         </Link>
                         <Link
                             href="/onboarding"
-                            className={`text-sm font-semibold py-1.5 px-4 rounded-full transition-all duration-300 ${scrolled
-                                    ? 'bg-white border-2 border-[#1E3A8A] text-[#1E3A8A] hover:bg-slate-50'
-                                    : 'bg-white/10 border-2 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm'
-                                }`}
+                            className="bg-[#1E3A8A] hover:bg-[#3B82F6] text-white text-sm font-semibold py-2 px-6 rounded-full shadow-sm hover:shadow-md transition-all transform hover:scale-105"
                         >
-                            Provider Sign Up
-                        </Link>
-                        <Link
-                            href="/dashboard"
-                            className="bg-[#1E3A8A] hover:bg-[#3B82F6] text-white text-sm font-semibold py-2 px-5 rounded-full shadow-sm hover:shadow-md transition-all transform hover:scale-105"
-                        >
-                            Search Cleaners
+                            Join as a Provider
                         </Link>
                     </div>
                 </div>
@@ -111,16 +104,9 @@ export default function NavBar() {
                     <Link
                         href="/onboarding"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block text-center w-full bg-white border-2 border-[#1E3A8A] text-[#1E3A8A] font-semibold py-3 rounded-xl shadow-sm"
-                    >
-                        Provider Sign Up
-                    </Link>
-                    <Link
-                        href="/dashboard"
-                        onClick={() => setMobileMenuOpen(false)}
                         className="block text-center w-full bg-[#1E3A8A] text-white font-semibold py-3 rounded-xl shadow-sm"
                     >
-                        Search Cleaners
+                        Join as a Provider
                     </Link>
                 </div>
             )}

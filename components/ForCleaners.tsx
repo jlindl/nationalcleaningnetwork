@@ -33,59 +33,59 @@ export default function ForCleaners() {
     return (
         <section
             ref={sectionRef}
-            className="py-24 bg-[#1E3A8A] relative overflow-hidden text-white"
+            className="py-24 bg-slate-950 relative overflow-hidden text-white"
         >
             {/* Subtle Texture/Gradient Overlay Array */}
-            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-[#3B82F6]/20 to-transparent pointer-events-none" />
-            <div className="absolute -bottom-48 -left-48 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-blue-600/10 to-transparent pointer-events-none" />
+            <div className="absolute -bottom-48 -left-48 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none animate-pulse" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col lg:flex-row items-center gap-16">
 
                 {/* Text Content */}
                 <div ref={contentRef} className="w-full lg:w-1/2">
-                    <div className="inline-flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-full font-medium text-sm mb-6 border border-white/20 backdrop-blur-sm">
-                        <TrendingUp size={16} className="text-sky-300" />
-                        <span className="text-sky-50">Grow Your Business</span>
+                    <div className="inline-flex items-center space-x-2 bg-blue-400/10 px-4 py-2 rounded-full font-bold text-sm mb-8 border border-blue-400/20 backdrop-blur-md">
+                        <TrendingUp size={16} className="text-blue-400" />
+                        <span className="text-blue-100 uppercase tracking-widest text-[10px]">Grow Your Business</span>
                     </div>
 
-                    <h2 className="text-4xl sm:text-5xl font-extrabold mb-6 leading-tight">
-                        Free advertising for cleaners <span className="text-sky-300">nationwide.</span>
+                    <h2 className="text-4xl sm:text-6xl font-extrabold mb-8 leading-tight tracking-tight">
+                        Free advertising for <span className="text-blue-400">cleaners.</span>
                     </h2>
 
-                    <p className="text-lg text-blue-100 mb-8 max-w-xl leading-relaxed">
+                    <p className="text-xl text-slate-400 mb-10 max-w-xl leading-relaxed">
                         List your services at no cost and get discovered by local customers. No subscription fees, no lead generation charges. You keep 100% of what you earn.
                     </p>
 
-                    <ul className="space-y-4 mb-10">
+                    <ul className="space-y-6 mb-12">
                         {[
                             { icon: ShieldCheck, text: "Build trust with a verified public profile." },
                             { icon: Users, text: "Connect directly with clients in your postcode." },
                             { icon: ArrowRight, text: "Setup takes less than 3 minutes." }
                         ].map((item, idx) => (
-                            <li key={idx} className="flex items-center text-blue-50">
-                                <div className="mr-4 p-2 bg-white/10 rounded-lg">
-                                    <item.icon className="w-5 h-5 text-sky-300" />
+                            <li key={idx} className="flex items-center group">
+                                <div className="mr-5 p-3 bg-white/5 rounded-2xl group-hover:bg-blue-600/20 transition-colors duration-300 border border-white/10">
+                                    <item.icon className="w-6 h-6 text-blue-400" />
                                 </div>
-                                <span className="font-medium text-lg">{item.text}</span>
+                                <span className="font-semibold text-lg text-slate-200 group-hover:text-white transition-colors">{item.text}</span>
                             </li>
                         ))}
                     </ul>
 
                     <Link
                         href="/onboarding"
-                        className="inline-flex items-center bg-white text-[#1E3A8A] font-bold py-4 px-8 rounded-xl shadow-xl hover:bg-sky-50 transition-all transform hover:scale-105"
+                        className="inline-flex items-center bg-[#3B82F6] text-white font-bold py-5 px-10 rounded-2xl shadow-2xl hover:bg-blue-500 transition-all transform hover:scale-105 active:scale-95 group"
                     >
-                        List Your Services (Free)
-                        <ArrowRight className="ml-2 w-5 h-5" />
+                        List Your Services Free
+                        <ArrowRight className="ml-3 w-6 h-6 transform group-hover:translate-x-2 transition-transform" />
                     </Link>
                 </div>
 
                 {/* Dashboard / Analytics Mockup */}
-                <div className="w-full lg:w-1/2 relative">
-                    <div className="w-full aspect-[4/3] bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md shadow-2xl relative z-10 overflow-hidden group">
-
+                <div className="w-full lg:w-1/2 relative group">
+                    <div className="w-full aspect-[4/3] glass-card border border-white/10 rounded-[40px] p-8 shadow-2xl relative z-10 overflow-hidden">
+                        
                         {/* Mockup Header */}
-                        <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+                        <div className="flex justify-between items-center mb-10 border-b border-white/5 pb-6">
                             <div className="flex items-center gap-3">
                                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/20">
                                     <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&q=80" alt="Professional Cleaner Profile" className="w-full h-full object-cover" />

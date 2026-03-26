@@ -11,20 +11,20 @@ const metrics = [
     {
         icon: ShieldCheck,
         value: "5,000+",
-        label: "Verified Cleaners",
-        description: "Fully vetted, insured, and background checked."
+        label: "Businesses Joined",
+        description: "Independent cleaners and companies nationwide."
     },
     {
         icon: CalendarCheck,
-        value: "2M+",
-        label: "Hours Cleaned",
-        description: "Trusted by households and businesses nationwide."
+        value: "50,000+",
+        label: "Monthly Searches",
+        description: "Potential clients looking for services in your area."
     },
     {
         icon: Home,
-        value: "100%",
-        label: "Satisfaction",
-        description: "Direct communication ensures you get exactly what you need."
+        value: "£0 Fees",
+        label: "Commission Free",
+        description: "You keep 100% of your earnings. No hidden charges."
     }
 ];
 
@@ -34,7 +34,9 @@ export default function TrustMetrics() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            gsap.from(metricsRef.current?.children as unknown as HTMLElement[], {
+            const items = metricsRef.current?.children as unknown as HTMLElement[];
+            
+            gsap.from(items, {
                 y: 30,
                 opacity: 0,
                 duration: 0.8,
@@ -44,6 +46,25 @@ export default function TrustMetrics() {
                     trigger: sectionRef.current,
                     start: "top 85%",
                 }
+            });
+
+            // Count animation
+            const valueElements = sectionRef.current?.querySelectorAll(".metric-value");
+            valueElements?.forEach((el) => {
+                const target = parseInt(el.getAttribute("data-target") || "0");
+                const obj = { value: 0 };
+                gsap.to(obj, {
+                    value: target,
+                    duration: 2,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 90%",
+                    },
+                    onUpdate: () => {
+                        el.textContent = Math.floor(obj.value).toLocaleString() + (el.getAttribute("data-suffix") || "");
+                    }
+                });
             });
         }, sectionRef);
 
@@ -61,17 +82,21 @@ export default function TrustMetrics() {
                     className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center"
                 >
                     {metrics.map((metric, index) => (
-                        <div key={index} className="flex flex-col items-center">
-                            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-[#1E3A8A] mb-4">
-                                <metric.icon className="w-6 h-6" />
+                        <div key={index} className="flex flex-col items-center group p-8 rounded-3xl transition-all duration-500 hover:bg-slate-50 hover:shadow-xl hover:-translate-y-2 border border-transparent hover:border-slate-100">
+                            <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-[#1E3A8A] mb-6 group-hover:scale-110 group-hover:bg-[#1E3A8A] group-hover:text-white transition-all duration-500 shadow-sm">
+                                <metric.icon className="w-7 h-7" />
                             </div>
-                            <div className="text-4xl font-extrabold text-[#0f172a] mb-2">
-                                {metric.value}
+                            <div 
+                                className="metric-value text-4xl sm:text-5xl font-extrabold text-[#0f172a] mb-2 tracking-tight"
+                                data-target={metric.value.replace(/[^0-9]/g, "")}
+                                data-suffix={metric.value.replace(/[0-9,]/g, "")}
+                            >
+                                0
                             </div>
-                            <div className="text-lg font-bold text-[#3B82F6] mb-2">
+                            <div className="text-lg font-bold text-[#3B82F6] mb-3">
                                 {metric.label}
                             </div>
-                            <p className="text-sm text-slate-500 max-w-xs mx-auto">
+                            <p className="text-sm text-slate-500 max-w-xs mx-auto leading-relaxed">
                                 {metric.description}
                             </p>
                         </div>

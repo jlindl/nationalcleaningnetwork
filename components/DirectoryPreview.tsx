@@ -84,20 +84,20 @@ export default function DirectoryPreview() {
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                     <div className="max-w-2xl">
                         <h2 className="text-[#1E3A8A] font-semibold tracking-wide uppercase text-sm mb-3">
-                            Directory Preview
+                            Profile Showcase
                         </h2>
                         <h3 className="text-3xl sm:text-4xl font-extrabold text-[#0f172a] mb-4">
-                            Meet verified professionals
+                            Your profile, seen by thousands
                         </h3>
                         <p className="text-lg text-slate-600">
-                            Our network consists of vetted, insured cleaners ready to handle residential and commercial spaces.
+                            This is how your business will appear to potential clients. Professional, trusted, and designed to convert visitors into bookings.
                         </p>
                     </div>
                     <Link
-                        href="/login"
+                        href="/onboarding"
                         className="inline-flex items-center text-[#3B82F6] font-semibold hover:text-[#1E3A8A] transition-colors group"
                     >
-                        View Full Directory
+                        Create Your Profile
                         <ChevronRight className="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>
@@ -109,17 +109,23 @@ export default function DirectoryPreview() {
                     {mockCleaners.map((cleaner, i) => (
                         <div
                             key={i}
-                            className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-100 transition-all duration-300 transform hover:-translate-y-1 group flex flex-col h-full"
+                            className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-slate-100 hover:shadow-2xl hover:border-blue-200 transition-all duration-500 transform hover:-translate-y-3 group flex flex-col h-full relative overflow-hidden"
                         >
-                            <div className="flex items-start gap-4 mb-6">
-                                <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0">
+                            {/* Card sheen effect on hover */}
+                            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-400/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+                            
+                            <div className="flex items-start gap-4 mb-6 relative z-10">
+                                <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-500">
                                     <img src={cleaner.image} alt={cleaner.name} className="w-full h-full object-cover" />
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-lg text-[#0f172a] group-hover:text-[#3B82F6] transition-colors flex items-center gap-1">
+                                    <h4 className="font-bold text-lg text-[#0f172a] group-hover:text-[#3B82F6] transition-colors flex items-center gap-2">
                                         {cleaner.name}
                                         {cleaner.verified && (
-                                            <CheckCircle2 className="w-4 h-4 text-green-500 fill-green-50" />
+                                            <div className="relative flex h-4 w-4">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                <CheckCircle2 className="relative inline-flex w-4 h-4 text-green-500 fill-green-50" />
+                                            </div>
                                         )}
                                     </h4>
                                     <div className="flex items-center text-sm text-slate-500 mt-1">
@@ -159,16 +165,16 @@ export default function DirectoryPreview() {
                 </div>
 
                 <div className="text-center bg-blue-50 p-8 rounded-3xl border border-blue-100/50">
-                    <h4 className="text-2xl font-bold text-[#0f172a] mb-3">Don't see your area?</h4>
+                    <h4 className="text-2xl font-bold text-[#0f172a] mb-3">Be the first in your area</h4>
                     <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                        We are constantly expanding our network. Use our search tool to find newly registered professionals near you, or sign up today to be the first cleaner in your local network!
+                        We are rapidly expanding across the UK. Sign up today to secure your presence in your local postcode and start receiving inquiries as soon as they come in.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        <Link href="/login" className="bg-[#1E3A8A] text-white px-8 py-3 rounded-xl font-semibold shadow-sm hover:bg-[#3B82F6] hover:shadow-md transition-all">
-                            Search Directory
-                        </Link>
-                        <Link href="/onboarding" className="bg-white text-[#1E3A8A] border border-[#1E3A8A]/20 px-8 py-3 rounded-xl font-semibold hover:bg-slate-50 transition-all">
+                        <Link href="/onboarding" className="bg-[#1E3A8A] text-white px-8 py-3 rounded-xl font-semibold shadow-sm hover:bg-[#3B82F6] hover:shadow-md transition-all">
                             List Your Services
+                        </Link>
+                        <Link href="/login" className="bg-white text-[#1E3A8A] border border-[#1E3A8A]/20 px-8 py-3 rounded-xl font-semibold hover:bg-slate-50 transition-all">
+                            Provider Login
                         </Link>
                     </div>
                 </div>
